@@ -58,7 +58,7 @@ void setup()
     String title = "LVGL porting example";
 
     Serial.begin(115200);
-    lcd__init();
+    lcd_init();
 
     // Serial.println(title + " start");
 
