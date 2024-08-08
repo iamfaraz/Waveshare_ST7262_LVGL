@@ -11,7 +11,7 @@
         "type": "git",
         "url": "https://github.com/iamfaraz/Waveshare_ST7262_LVGL"
     },
-    "version": "1.1.16",
+    "version": "0.1",
     "frameworks": [
         "arduino",
         "espidf",
