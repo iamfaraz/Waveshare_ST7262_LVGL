@@ -1,11 +1,9 @@
+#pragma once
 #ifndef Waveshare_ST7262_LVGL
 #define Waveshare_ST7262_LVGL
 
-#pragma once
-
 #include <Arduino.h>
 #include <ESP_Panel_Library.h>
-#include <ESP_IOExpander_Library.h>
 #include <lvgl.h>
 /*
  * SPDX-FileCopyrightText: 2024 Espressif Systems (Shanghai) CO LTD
@@ -148,6 +146,7 @@ extern "C"
 {
 #endif
 
+    // ESP_IOExpander *expander;
     /**
      * @brief Porting LVGL with LCD and touch panel. This function should be called after the initialization of the LCD and touch panel.
      *
@@ -177,6 +176,8 @@ extern "C"
     bool lvgl_port_unlock(void);
 
     void lcd_init(void);
+
+    void toggle_backlight(int &isOn);
 
 #ifdef __cplusplus
 }

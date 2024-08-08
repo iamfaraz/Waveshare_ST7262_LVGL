@@ -5,6 +5,7 @@
  */
 #include <Arduino.h>
 #include <ESP_Panel_Library.h>
+#include <ESP_IOExpander_Library.h>
 #include <lvgl.h>
 #include "Waveshare_ST7262_LVGL.h"
 
@@ -14,8 +15,11 @@ static const char *TAG = "lvgl_port";
 static SemaphoreHandle_t lvgl_mux = nullptr; // LVGL mutex
 static TaskHandle_t lvgl_task_handle = nullptr;
 
+ESP_IOExpander *expander = NULL;
+
 #if LVGL_PORT_ROTATION_DEGREE != 0
-static void *get_next_frame_buffer(ESP_PanelLcd *lcd)
+static void *
+get_next_frame_buffer(ESP_PanelLcd *lcd)
 {
     static void *next_fb = NULL;
     static void *fbs[2] = {NULL};
@@ -730,7 +734,7 @@ void lcd_init(void)
      */
     Serial.println("Initialize IO expander");
     /* Initialize IO expander */
-    ESP_IOExpander *expander = new ESP_IOExpander_CH422G((i2c_port_t)I2C_MASTER_NUM, ESP_IO_EXPANDER_I2C_CH422G_ADDRESS_000, I2C_MASTER_SCL_IO, I2C_MASTER_SDA_IO);
+    expander = new ESP_IOExpander_CH422G((i2c_port_t)I2C_MASTER_NUM, ESP_IO_EXPANDER_I2C_CH422G_ADDRESS_000, I2C_MASTER_SCL_IO, I2C_MASTER_SDA_IO);
     // ESP_IOExpander *expander = new ESP_IOExpander_CH422G(I2C_MASTER_NUM, ESP_IO_EXPANDER_I2C_CH422G_ADDRESS_000);
     expander->init();
     expander->begin();
@@ -760,4 +764,18 @@ void lcd_init(void)
 
     Serial.println("Initialize LVGL");
     lvgl_port_init(panel->getLcd(), panel->getTouch());
+}
+
+void toggle_backlight(int &isOn)
+{
+    if (isOn)
+    {
+        expander->digitalWrite(LCD_BL, LOW);
+        isOn = 0;
+    }
+    else
+    {
+        expander->digitalWrite(LCD_BL, HIGH);
+        isOn = 1;
+    }
 }

@@ -1,1 +1,1 @@
-"# Waveshare_ST7262_LVGL" 
+# Waveshare_ST7262_LVGL
